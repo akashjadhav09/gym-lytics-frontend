@@ -1,20 +1,51 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Scale, Calendar } from "lucide-react";
 import { useState, useRef } from "react";
 
 import Navbar from "../components/Navbar";
+import { addWeight } from "../api/weight.api";
 
 export default function UpdateWeight() {
   const [weight, setWeight] = useState("81.0");
   const [date, setDate] = useState("2024-04-18");
   const dateRef = useRef(null);
+  const navigate = useNavigate();
 
-  const handleWeightChange = (e) => {
-    const value = e.target.value;
-    if (/^\d*\.?\d{0,2}$/.test(value)) {
-      setWeight(value);
+
+  const handleWeightChange = async (e) => {
+    try {
+      const value = e.target.value;
+      if (/^\d*\.?\d{0,2}$/.test(value)) {
+        setWeight(value);
+      }
+
+      const payload = {
+        weight : Number(weight),
+        date
+      }
+      await addWeight(payload);
+      
+      alert("Weight Updated");
+      navigate("/dashboard");
+    } catch (error) {
+      console.alert("Error While Update Weight, Retry")
     }
   };
+
+  const handleUpdateWeight = async ()=>{
+    try {
+      const payload = {
+        weight : Number(weight),
+        date
+      }
+      await addWeight(payload);
+      
+      alert("Weight Updated");
+      navigate("/dashboard");
+    } catch (error) {
+      console.alert("Error While Update Weight, Retry")
+    }
+  }
 
   return (
     <>
@@ -24,7 +55,7 @@ export default function UpdateWeight() {
 
           {/* Header */}
           <div className="p-4 flex items-center space-x-4 border-b border-gray-800">
-            <Link to="/" className="text-gray-300 hover:text-white">
+            <Link to="/dashboard" className="text-gray-300 hover:text-white">
               <ArrowLeft className="w-5 h-5" />
             </Link>
             <h2 className="text-lg font-bold text-white flex-1 text-center pr-9">
@@ -125,7 +156,7 @@ export default function UpdateWeight() {
           {/* Footer */}
           <div className="p-5 pt-0 flex space-x-3">
             <Link
-              to="/"
+              to="/dashboard"
               className="flex-1 text-center bg-[#353b47] hover:bg-[#434b5a] py-2.5 rounded-lg text-sm"
             >
               Cancel
@@ -133,6 +164,7 @@ export default function UpdateWeight() {
 
             <button
               disabled={!weight}
+              onClick={handleUpdateWeight}
               className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-400 hover:to-orange-500 py-2.5 rounded-lg text-sm disabled:opacity-50"
             >
               Update Weight

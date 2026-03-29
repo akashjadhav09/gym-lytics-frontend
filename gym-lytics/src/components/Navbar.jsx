@@ -20,7 +20,7 @@ export default function Navbar() {
         <h1 className="text-xl font-semibold tracking-wide text-gray-100">Gym Workout Tracker</h1>
       </div>
       <div className="space-x-3 flex">
-        <Link to="/" className={navLinkClass("/")}>
+        <Link to="/dashboard" className={navLinkClass("/dashboard")}>
           Dashboard
         </Link>
         <Link to="/add-workout" className={navLinkClass("/add-workout")}>
